@@ -3,8 +3,8 @@ title: "Tidyverse"
 author: "Harshitha Viswanath"
 ---
 
+# Loading Libraries
 
-#Loading Libraries---------
 ```{r}
 library(tidyverse)
 library(tibble)
@@ -17,45 +17,55 @@ library(ggplot2)
 library(readxl)
 library(lubridate)
 ```
-#Importing Files---------
+
+# Importing Files
+
 ```{r}
 bikes_tbl  <-  read_excel(path = "C:/Users/49157/Desktop/BM1_repo/ss23-bdsb-HarshithaViswanath2608/assets/Tidyverse_data/bikes.xlsx")
 orderlines_tbl   <-  read_excel(path = "C:/Users/49157/Desktop/BM1_repo/ss23-bdsb-HarshithaViswanath2608/assets/Tidyverse_data/orderlines.xlsx")
 bikeshops_tbl   <-   read_excel(path = "C:/Users/49157/Desktop/BM1_repo/ss23-bdsb-HarshithaViswanath2608/assets/Tidyverse_data/bikeshops.xlsx")
 ```
-#Examining Data---------
+
+# Examining Data
+
 ```{r}
 #glimpse(bikes_tbl)
 #glimpse(orderlines_tbl)
 #glimpse(bikeshops_tbl)
 
 ```
-#Left Join of tables bikes_tbl and bikeshops_tbl with orderlines_tbl to obtain location, price and quantity---------
+
+# Left Join of tables bikes_tbl and bikeshops_tbl with orderlines_tbl to obtain location, price and quantity
+
 ```{r}
 bike_orderlines_joined_tbl   <-   orderlines_tbl   %>%
-  left_join(bikes_tbl, by = c("product.id" = "bike.id"))  %>%
-  left_join(bikeshops_tbl, by = c("customer.id" = "bikeshop.id"))
+  left_join(bikes_tbl, by = c("product.id" = "bike.id"))  %>% #left join of orderlines and bikes table
+  left_join(bikeshops_tbl, by = c("customer.id" = "bikeshop.id")) #left join of orderlines and bikeshops table
 #bike_orderlines_joined_tbl
 ```
-#Data Wrangling to obtain the bike model under category with addition of total price ---------
+
+# Data Wrangling to obtain the bike model under category with addition of total price
+
 ```{r}
 bike_orderlines_wrangled_tbl <- bike_orderlines_joined_tbl %>% 
- separate(col = location,
+ separate(col = location,                              #separating location
            into = c("city","state"),
            sep = ", ",
            convert = T) %>%
-  separate(col    = category,
+  separate(col    = category,                          #separating category
            into   = c("category.1", "category.2", "category.3"),
            sep    = " - ") %>%
   
   
-  mutate(total_price = price * quantity)
+  mutate(total_price = price * quantity)   # adding total_price column
 #glimpse(bike_orderlines_wrangled_tbl)
 
 ```
-#State with the highest revenue---------
+
+# State with the highest revenue
+
 ```{r}
-sales_by_location_tbl  <-  bike_orderlines_wrangled_tbl %>%
+sales_by_location_tbl  <-  bike_orderlines_wrangled_tbl %>%     #table for plotting the graph
   select(state, total_price) %>%
   group_by(state) %>%
   summarize(sales = sum(total_price)) %>%
@@ -87,7 +97,9 @@ sales_by_location_tbl %>%
 
 
 ```
-#Analysing sales by location and year using facet_wrap---------
+
+# Analysing sales by location and year using facet_wrap
+
 ```{r}
 sales_by_location_cat_1_tbl <- bike_orderlines_wrangled_tbl %>%
   select(state, total_price, category.1) %>%
