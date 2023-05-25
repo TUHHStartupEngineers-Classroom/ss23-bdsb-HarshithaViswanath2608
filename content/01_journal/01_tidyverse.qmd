@@ -25,9 +25,9 @@ bikeshops_tbl   <-   read_excel(path = "C:/Users/49157/Desktop/BM1_repo/ss23-bds
 ```
 #Examining Data---------
 ```{r}
-glimpse(bikes_tbl)
-glimpse(orderlines_tbl)
-glimpse(bikeshops_tbl)
+#glimpse(bikes_tbl)
+#glimpse(orderlines_tbl)
+#glimpse(bikeshops_tbl)
 
 ```
 #Left Join of tables bikes_tbl and bikeshops_tbl with orderlines_tbl to obtain location, price and quantity---------
@@ -65,7 +65,7 @@ sales_by_location_tbl  <-  bike_orderlines_wrangled_tbl %>%
                                      suffix = "€"))
 
 
-glimpse(sales_by_location_tbl)
+#glimpse(sales_by_location_tbl)
 
 sales_by_location_tbl %>%
   ggplot(aes(x = state, y = sales)) +
